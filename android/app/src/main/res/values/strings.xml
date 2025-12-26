@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Triangle</string>
+    <string name="title_activity_main">Triangle</string>
+    <string name="package_name">com.example.Triangle</string>
+    <string name="custom_url_scheme">com.example.Triangle</string>
+</resources>

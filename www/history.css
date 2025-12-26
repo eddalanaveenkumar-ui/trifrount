@@ -1,0 +1,60 @@
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--dark-bg);
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.history-title {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.remove-all-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.history-container {
+    padding: 20px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+
+.history-thumbnail {
+    width: 160px;
+    height: 90px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+}
+
+.history-info .title {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.history-info .channel {
+    color: var(--text-secondary);
+    font-size: 14px;
+}

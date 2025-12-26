@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ΔTube - Video Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <span class="logo-triangle">Δ</span>
+            <span>Triangle</span>
+        </div>
+
+        <div class="search-bar">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search videos...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="user-actions">
+            <button class="upload-btn">
+                <i class="fas fa-upload"></i>
+                <span>Upload</span>
+            </button>
+            <button class="notification-btn">
+                <i class="far fa-bell"></i>
+                <span class="notification-count">3</span>
+            </button>
+            <div class="user-profile">U</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="player-main-container">
+        <div class="player-content-area">
+            <!-- Video Player -->
+            <div class="video-player-container">
+                <div class="video-player" id="videoPlayer">
+                    <!-- Video will be loaded here -->
+                </div>
+                <div class="video-controls">
+                    <button class="control-btn play-btn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+                    <div class="time-display">0:00 / 0:00</div>
+                    <button class="control-btn">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <button class="control-btn">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Video Info -->
+            <div class="video-info">
+                <div class="video-tags" id="videoTags">
+                    <!-- Tags will be loaded here -->
+                </div>
+                <h1 class="video-title" id="videoTitle"></h1>
+                <div class="video-stats">
+                    <div class="views-date" id="videoStats"></div>
+                    <div class="engagement-buttons">
+                        <button class="engagement-btn" id="likeBtn">
+                            <i class="far fa-thumbs-up"></i>
+                            <span></span>
+                        </button>
+                        <button class="engagement-btn" id="dislikeBtn">
+                            <i class="far fa-thumbs-down"></i>
+                        </button>
+                        <button class="engagement-btn" id="shareBtn">
+                            <i class="fas fa-share"></i>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel Info -->
+            <div class="channel-info">
+                <div class="channel-left">
+                    <div class="channel-avatar" id="channelAvatar"></div>
+                    <div class="channel-details">
+                        <div class="channel-name" id="channelName"></div>
+                        <div class="channel-subscribers" id="channelSubs"></div>
+                    </div>
+                </div>
+                <button class="subscribe-btn" id="subscribeBtn">Subscribe</button>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="player-recommendations-area">
+            <h3 class="section-title" style="font-size: 20px;">
+                <i class="fas fa-thumbs-up"></i>
+                Recommended
+            </h3>
+            <div class="recommendations-grid" id="recommendationsGrid">
+                <!-- Recommendations will be loaded by recommendation.js -->
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="recommendation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoId = parseInt(urlParams.get('videoId'));
+
+            const video = videoDatabase.longVideos.find(v => v.id === videoId);
+
+            if (video) {
+                // Populate video details
+                document.getElementById('videoTitle').textContent = video.title;
+                document.getElementById('videoStats').textContent = `${video.views} views • ${video.timeAgo}`;
+                document.getElementById('likeBtn').querySelector('span').textContent = video.likes;
+                document.getElementById('channelName').textContent = video.channel;
+                document.getElementById('channelSubs').textContent = `${video.subscribers} subscribers`;
+                document.getElementById('channelAvatar').textContent = video.channelInitials;
+
+                // Populate video tags
+                const tagsContainer = document.getElementById('videoTags');
+                tagsContainer.innerHTML = '';
+                video.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'video-tag';
+                    tagElement.textContent = tag;
+                    tagsContainer.appendChild(tagElement);
+                });
+
+                // Load video player
+                const player = document.getElementById('videoPlayer');
+                player.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(45deg, #000, #333);">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">▶️</div>
+                            <div>Now Playing: ${video.title}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

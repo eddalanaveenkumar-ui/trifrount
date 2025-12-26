@@ -1,0 +1,767 @@
+
+
+"Turn on WiFi"
+
+"Switch on wireless"
+
+"Enable WiFi"
+
+"Connect to internet"
+
+"WiFi on"
+
+"Start wireless connection"
+
+"Activate WiFi"
+
+"Make WiFi available"
+
+"Turn wireless on"
+
+"WiFi please"
+
+"Switch WiFi on"
+
+"Enable wireless network"
+
+"Connect WiFi"
+
+"Turn on wireless connection"
+
+"WiFi enable"
+
+"On WiFi"
+
+"Make WiFi active"
+
+"Start WiFi"
+
+"Turn on network"
+
+"WiFi connection on"
+
+"Activate wireless"
+
+"Turn WiFi switch on"
+
+"Enable internet connection"
+
+"WiFi power on"
+
+"Switch on WiFi connection"
+
+"Turn on WiFi settings"
+
+"Make WiFi work"
+
+"WiFi activation"
+
+"Start wireless"
+
+"Connect to WiFi"
+
+"Turn WiFi feature on"
+
+"Enable WiFi mode"
+
+"WiFi toggle on"
+
+"Switch wireless on"
+
+"Make WiFi functional"
+
+"Turn on WiFi module"
+
+"WiFi connection enable"
+
+"Activate network"
+
+"Turn on wireless internet"
+
+"WiFi functionality on"
+
+"Switch on network connection"
+
+"Enable wireless connectivity"
+
+"Turn WiFi availability on"
+
+"Make wireless active"
+
+"WiFi status on"
+
+"Turn on connectivity"
+
+"Activate WiFi connection"
+
+"Switch WiFi availability on"
+
+"Enable WiFi access"
+
+"Turn on wireless access"
+
+"WiFi operational"
+
+"Make internet available"
+
+"Turn on WiFi service"
+
+"Activate wireless network"
+
+"Switch on internet connection"
+
+"Enable network access"
+
+"Turn on data connection"
+
+"WiFi make available"
+
+"Activate connectivity"
+
+"Switch on connectivity"
+
+"Enable access point"
+
+"Turn on network interface"
+
+"WiFi functionality enable"
+
+"Make connection available"
+
+"Activate internet"
+
+"Switch on data"
+
+"Enable connection"
+
+"Turn on access"
+
+"WiFi go live"
+
+"Make WiFi operational"
+
+"Activate data connection"
+
+"Switch on internet"
+
+"Enable wireless interface"
+
+"Turn on WiFi adapter"
+
+"WiFi become active"
+
+"Make network available"
+
+"Activate access"
+
+"Switch on adapter"
+
+"Enable WiFi chip"
+
+"Turn on wireless chip"
+
+"WiFi initiate"
+
+"Make connection active"
+
+"Activate adapter"
+
+"Switch on wireless chip"
+
+"Enable wireless adapter"
+
+"Turn on network chip"
+
+"WiFi commence"
+
+"Make adapter active"
+
+"Activate wireless interface"
+
+"Switch on network interface"
+
+"Enable network chip"
+
+"Turn on connectivity chip"
+
+"WiFi start functioning"
+
+"Make interface active"
+
+"Activate network chip"
+
+"Switch on connectivity interface"
+
+"Enable connectivity chip"
+
+"Turn on internet chip"
+
+"WiFi begin operation"
+
+"Make chip active"
+
+Hindi Variations:
+"WiFi चालू करो"
+
+"वाईफाई ऑन करो"
+
+"वायरलेस चालू करो"
+
+"इंटरनेट कनेक्ट करो"
+
+"WiFi शुरू करो"
+
+"वाईफाई सक्षम करो"
+
+"वायरलेस ऑन करो"
+
+"नेटवर्क चालू करो"
+
+"WiFi चलाओ"
+
+"इंटरनेट चालू करो"
+
+Tamil Variations:
+"WiFi ஆன் செய்"
+
+"வைஃபை இயக்கு"
+
+"வயர்லெஸ் ஆன் செய்"
+
+"இணையம் இணை"
+
+"WiFi தொடங்கு"
+
+Telugu Variations:
+"WiFi ఆన్ చేయి"
+
+"వైఫై చాలూచేయి"
+
+"వైర్లెస్ ఆన్ చేయి"
+
+"ఇంటర్నెట్ కనెక్ట్ చేయి"
+
+"WiFi ప్రారంభించు"
+
+Bengali Variations:
+"WiFi চালু কর"
+
+"ওয়াইফাই অন কর"
+
+"ওয়্যারলেস চালু কর"
+
+"ইন্টারনেট কানেক্ট কর"
+
+"WiFi শুরু কর"
+
+Marathi Variations:
+"WiFi चालू करा"
+
+"वायफाय चालू करा"
+
+"वायरलेस चालू करा"
+
+"इंटरनेट कनेक्ट करा"
+
+"WiFi सुरू करा"
+
+Gujarati Variations:
+"WiFi ચાલુ કરો"
+
+"વાઈફાઇ ચાલુ કરો"
+
+"વાયરલેસ ચાલુ કરો"
+
+"ઇન્ટરનેટ કનેક્ટ કરો"
+
+"WiFi શરૂ કરો"
+
+Kannada Variations:
+"WiFi ಆನ್ ಮಾಡಿ"
+
+"ವೈಫಾಯ್ ಆನ್ ಮಾಡಿ"
+
+"ವೈರ್ಲೆಸ್ ಆನ್ ಮಾಡಿ"
+
+"ಇಂಟರ್ನೆಟ್ ಕನೆಕ್ಟ್ ಮಾಡಿ"
+
+"WiFi ಪ್ರಾರಂಭಿಸಿ"
+
+Malayalam Variations:
+"WiFi ഓൺ ചെയ്യുക"
+
+"വൈഫൈ ഓൺ ചെയ്യുക"
+
+"വയർലെസ് ഓൺ ചെയ്യുക"
+
+"ഇന്റർനെറ്റ് കണക്റ്റ് ചെയ്യുക"
+
+"WiFi തുടങ്ങുക"
+
+Punjabi Variations:
+"WiFi ਚਾਲੂ ਕਰੋ"
+
+"ਵਾਈਫਾਈ ਚਾਲੂ ਕਰੋ"
+
+"ਵਾਇਰਲੈਸ ਚਾਲੂ ਕਰੋ"
+
+"ਇੰਟਰਨੈੱਟ ਕਨੈਕਟ ਕਰੋ"
+
+"WiFi ਸ਼ੁਰੂ ਕਰੋ"
+
+Odia Variations:
+"WiFi ଚାଲୁ କର"
+
+"ୱାଇଫାଇ ଚାଲୁ କର"
+
+"ୱାୟାରଲେସ ଚାଲୁ କର"
+
+"ଇଣ୍ଟରନେଟ କନେକ୍ଟ କର"
+
+"WiFi ଆରମ୍ଭ କର"
+
+Assamese Variations:
+"WiFi চালু কৰক"
+
+"ৱাইফাই চালু কৰক"
+
+"ৱায়াৰলেচ চালু কৰক"
+
+"ইণ্টাৰনেট কানেক্ট কৰক"
+
+"WiFi আৰম্ভ কৰক"
+
+Urdu Variations:
+"WiFi چلائیں"
+
+"وائی فائی آن کریں"
+
+"وائرلیس آن کریں"
+
+"انٹرنیٹ کنیکٹ کریں"
+
+"WiFi شروع کریں"
+
+Hotspot Control Commands
+English Variations:
+"Turn on hotspot"
+
+"Switch on mobile hotspot"
+
+"Enable hotspot"
+
+"Start hotspot"
+
+"Hotspot on"
+
+"Activate personal hotspot"
+
+"Make hotspot available"
+
+"Turn on tethering"
+
+"Enable mobile sharing"
+
+"Start personal hotspot"
+
+"Hotspot please"
+
+"Switch hotspot on"
+
+"Enable Wi-Fi sharing"
+
+"Connect hotspot"
+
+"Turn on internet sharing"
+
+"Hotspot enable"
+
+"On hotspot"
+
+"Make hotspot active"
+
+"Start Wi-Fi hotspot"
+
+"Turn on portable hotspot"
+
+"Hotspot connection on"
+
+"Activate mobile hotspot"
+
+"Turn hotspot switch on"
+
+"Enable internet sharing"
+
+"Hotspot power on"
+
+"Switch on personal hotspot"
+
+"Turn on hotspot settings"
+
+"Make hotspot work"
+
+"Hotspot activation"
+
+"Start mobile hotspot"
+
+Hindi Variations:
+"हॉटस्पॉट चालू करो"
+
+"मोबाइल हॉटस्पॉट चालू करो"
+
+"हॉटस्पॉट ऑन करो"
+
+"टेथरिंग चालू करो"
+
+"इंटरनेट शेयरिंग चालू करो"
+
+Tamil Variations:
+"ஹாட்ஸ்பாட் ஆன் செய்"
+
+"மொபைல் ஹாட்ஸ்பாட் ஆன் செய்"
+
+"ஹாட்ஸ்பாட் இயக்கு"
+
+"டெதரிங் ஆன் செய்"
+
+"இணைய பகிர்வு தொடங்கு"
+
+Telugu Variations:
+"హాట్స్పాట్ ఆన్ చేయి"
+
+"మొబైల్ హాట్స్పాట్ ఆన్ చేయి"
+
+"హాట్స్పాట్ చాలూచేయి"
+
+"టెథరింగ్ ఆన్ చేయి"
+
+"ఇంటర్నెట్ షేరింగ్ ప్రారంభించు"
+
+Bengali Variations:
+"হটস্পট চালু কর"
+
+"মোবাইল হটস্পট চালু কর"
+
+"হটস্পট অন কর"
+
+"টেথারিং চালু কর"
+
+"ইন্টারনেট শেয়ারিং চালু কর"
+
+Play Music Commands
+English Variations:
+"Play music"
+
+"Start music"
+
+"Play songs"
+
+"Play some music"
+
+"Music please"
+
+"Start playing music"
+
+"Play my music"
+
+"Begin music"
+
+"Play audio"
+
+"Start songs"
+
+"Play music library"
+
+"Start music player"
+
+"Play all songs"
+
+"Music on"
+
+"Play tracks"
+
+"Start playback"
+
+"Play playlist"
+
+"Begin playback"
+
+"Play my playlist"
+
+"Start audio"
+
+"Play shuffle"
+
+"Start random music"
+
+"Play artists"
+
+"Start albums"
+
+"Play now"
+
+"Music start"
+
+"Play collection"
+
+"Start music now"
+
+"Play favorite songs"
+
+"Begin songs"
+
+Hindi Variations:
+"संगीत चलाओ"
+
+"गाना चलाओ"
+
+"म्यूजिक प्ले करो"
+
+"गाने बजाओ"
+
+"संगीत शुरू करो"
+
+Tamil Variations:
+"இசை வாசி"
+
+"பாடல் வாசி"
+
+"மியூசிக் ப்ளே செய்"
+
+"பாடல்கள் வாசி"
+
+"இசை தொடங்கு"
+
+Telugu Variations:
+"సంగీతం వాయించు"
+
+"పాట ప్లే చేయి"
+
+"మ్యూజిక్ ప్లే చేయి"
+
+"పాటలు వాయించు"
+
+"సంగీతం ప్రారంభించు"
+
+Bengali Variations:
+"গান বাজাও"
+
+"সঙ্গীত বাজাও"
+
+"মিউজিক প্লে কর"
+
+"গানগুলি বাজাও"
+
+"সঙ্গীত শুরু কর"
+
+Play Video Commands
+English Variations:
+"Play video"
+
+"Start video"
+
+"Play movie"
+
+"Play some video"
+
+"Video please"
+
+"Start playing video"
+
+"Play my video"
+
+"Begin video"
+
+"Play film"
+
+"Start movie"
+
+"Play video library"
+
+"Start video player"
+
+"Play all videos"
+
+"Video on"
+
+"Play clips"
+
+"Start video playback"
+
+"Play series"
+
+"Begin movie"
+
+"Play my videos"
+
+"Start film"
+
+"Play show"
+
+"Start documentary"
+
+"Play media"
+
+"Start watching"
+
+"Play now"
+
+"Video start"
+
+"Play collection"
+
+"Start video now"
+
+"Play favorite videos"
+
+"Begin watching"
+
+Hindi Variations:
+"वीडियो चलाओ"
+
+"फिल्म चलाओ"
+
+"वीडियो प्ले करो"
+
+"मूवी चलाओ"
+
+"वीडियो शुरू करो"
+
+Tamil Variations:
+"வீடியோ வாசி"
+
+"படம் வாசி"
+
+"வீடியோ ப்ளே செய்"
+
+"திரைப்படம் வாசி"
+
+"வீடியோ தொடங்கு"
+
+Telugu Variations:
+"వీడియో ప్లే చేయి"
+
+"సినిమా ప్లే చేయి"
+
+"వీడియో ఆడించు"
+
+"చిత్రం ప్లే చేయి"
+
+"వీడియో ప్రారంభించు"
+
+Bengali Variations:
+"ভিডিও বাজাও"
+
+"সিনেমা বাজাও"
+
+"ভিডিও প্লে কর"
+
+"চলচ্চিত্র বাজাও"
+
+"ভিডিও শুরু কর"
+
+Flight Mode Commands
+English Variations:
+"Turn on flight mode"
+
+"Switch to airplane mode"
+
+"Enable flight mode"
+
+"Activate airplane mode"
+
+"Flight mode on"
+
+"Airplane mode please"
+
+"Switch flight mode on"
+
+"Enable airplane mode"
+
+"Turn on airplane mode"
+
+"Flight mode activate"
+
+"On flight mode"
+
+"Make flight mode active"
+
+"Start flight mode"
+
+"Turn on aeroplane mode"
+
+"Flight mode connection off"
+
+"Activate aeroplane mode"
+
+"Turn flight mode switch on"
+
+"Enable offline mode"
+
+"Flight mode power on"
+
+"Switch on aeroplane mode"
+
+"Turn on flight settings"
+
+"Make flight mode work"
+
+"Flight mode activation"
+
+"Start airplane mode"
+
+"Connect to flight mode"
+
+"Turn flight feature on"
+
+"Enable flight mode settings"
+
+"Flight mode toggle on"
+
+"Switch airplane mode on"
+
+"Make flight mode functional"
+
+Hindi Variations:
+"फ्लाइट मोड चालू करो"
+
+"एयरप्लेन मोड चालू करो"
+
+"फ्लाइट मोड ऑन करो"
+
+"विमान मोड चालू करो"
+
+"फ्लाइट मोड सक्षम करो"
+
+Tamil Variations:
+"பிளைட் மோட் ஆன் செய்"
+
+"ஏர்ப்ளேன் மோட் ஆன் செய்"
+
+"பிளைட் மோட் இயக்கு"
+
+"விமான மோட் ஆன் செய்"
+
+"பிளைட் மோட் செயல்படுத்து"
+
+Telugu Variations:
+"ఫ్లైట్ మోడ్ ఆన్ చేయి"
+
+"ఏర్ప్లేన్ మోడ్ ఆన్ చేయి"
+
+"ఫ్లైట్ మోడ్ చాలూచేయి"
+
+"విమాన మోడ్ ఆన్ చేయి"
+
+"ఫ్లైట్ మోడ్ సక్రియం చేయి"
+
+Bengali Variations:
+"ফ্লাইট মোড চালু কর"
+
+"এয়ারপ্লেন মোড চালু কর"
+
+"ফ্লাইট মোড অন কর"
+
+"বিমান মোড চালু কর"
+
+"ফ্লাইট মোড সক্রিয় কর"

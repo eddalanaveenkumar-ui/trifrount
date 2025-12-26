@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Voice Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .voice-container {
+            padding: 20px;
+        }
+        .language-select {
+            margin-bottom: 20px;
+        }
+        .language-select label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        .language-select select {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .permission-section {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .permission-btn {
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .permission-btn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+
+        /* Animation Container */
+        .voice-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .voice-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .voice-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff0000, #ff4d4d);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+            transform: scale(0);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .voice-overlay.active .voice-circle {
+            transform: scale(1);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
+        .voice-status {
+            margin-top: 20px;
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+            position: absolute;
+            bottom: 100px;
+            width: 100%;
+        }
+
+        .voice-trigger-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 900;
+        }
+        .voice-trigger-btn i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .model-status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #aaa;
+            text-align: center;
+        }
+
+        .download-progress {
+            width: 100%;
+            height: 4px;
+            background-color: #333;
+            margin-top: 10px;
+            border-radius: 2px;
+            display: none;
+        }
+        .download-bar {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.2s;
+        }
+    </style>
+    <!-- Vosk Browser Library -->
+    <script src="https://cdn.jsdelivr.net/npm/vosk-browser@0.0.9/dist/vosk.js"></script>
+</head>
+<body>
+    <header class="settings-header">
+        <a href="settings.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="settings-title">Voice Assistant</h1>
+    </header>
+
+    <div class="voice-container">
+        <div class="language-select">
+            <label for="language">Select Assistant Language:</label>
+            <select id="language">
+                <option value="en-US">English (US) - Offline Ready</option>
+                <option value="hi-IN">Hindi (India)</option>
+                <option value="bn-IN">Bengali (India)</option>
+                <option value="te-IN">Telugu (India)</option>
+                <option value="mr-IN">Marathi (India)</option>
+                <option value="ta-IN">Tamil (India)</option>
+                <option value="gu-IN">Gujarati (India)</option>
+                <option value="kn-IN">Kannada (India)</option>
+                <option value="ml-IN">Malayalam (India)</option>
+                <option value="pa-IN">Punjabi (India)</option>
+            </select>
+        </div>
+
+        <div class="permission-section">
+            <p style="margin-bottom: 15px; color: #aaa;">Grant microphone permission to enable voice commands.</p>
+            <button id="permissionBtn" class="permission-btn">Enable Microphone</button>
+            <div id="modelStatus" class="model-status">Initializing...</div>
+            <div class="download-progress" id="downloadProgress">
+                <div class="download-bar" id="downloadBar"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; color: #aaa; font-size: 14px;">
+            <h3>How to use:</h3>
+            <p>1. Select your preferred language.</p>
+            <p>2. Click the microphone button below or long-press anywhere to activate.</p>
+            <p>3. Speak your command (e.g., "Play", "Search for funny cats").</p>
+        </div>
+    </div>
+
+    <!-- Floating Trigger Button -->
+    <div class="voice-trigger-btn" id="voiceTrigger">
+        <i class="fas fa-microphone"></i>
+    </div>
+
+    <!-- Voice Overlay Animation -->
+    <div class="voice-overlay" id="voiceOverlay">
+        <div class="voice-circle">
+            <i class="fas fa-microphone" style="font-size: 32px; color: white;"></i>
+        </div>
+        <div class="voice-status" id="voiceStatus">Initializing...</div>
+    </div>
+
+    <script src="theme.js"></script>
+    <script>
+        const voiceTrigger = document.getElementById('voiceTrigger');
+        const voiceOverlay = document.getElementById('voiceOverlay');
+        const voiceStatus = document.getElementById('voiceStatus');
+        const languageSelect = document.getElementById('language');
+        const permissionBtn = document.getElementById('permissionBtn');
+        const modelStatus = document.getElementById('modelStatus');
+        const downloadProgress = document.getElementById('downloadProgress');
+        const downloadBar = document.getElementById('downloadBar');
+
+        let model;
+        let recognizer;
+        let audioContext;
+        let mediaStreamSource;
+        let scriptProcessor;
+        let isListening = false;
+        let commands = [];
+        let currentStream;
+        let useWebSpeechFallback = false;
+
+        // Load commands from JSON
+        fetch('commands.json')
+            .then(response => response.json())
+            .then(data => {
+                commands = data.commands;
+                console.log('Commands loaded:', commands);
+            })
+            .catch(error => console.error('Error loading commands:', error));
+
+        // Function to load Vosk model
+        async function loadVoskModel() {
+            modelStatus.textContent = "Checking voice models...";
+
+            // We only load the English model for offline demo as it's CORS friendly
+            // For other languages, we will simulate download and use Web Speech API
+            const modelUrl = 'https://models.vosk.kusal.io/vosk-model-small-en-us-0.15.zip';
+
+            try {
+                modelStatus.textContent = "Downloading English Offline Model...";
+                downloadProgress.style.display = 'block';
+
+                // Simulate progress for visual feedback
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 5;
+                    downloadBar.style.width = `${Math.min(progress, 90)}%`;
+                    if (progress > 90) clearInterval(interval);
+                }, 100);
+
+                Vosk.setLogLevel(0);
+                model = await Vosk.createModel(modelUrl);
+
+                clearInterval(interval);
+                downloadBar.style.width = '100%';
+                setTimeout(() => {
+                    downloadProgress.style.display = 'none';
+                    modelStatus.textContent = "Offline Model Ready (English).";
+                    modelStatus.style.color = "#4CAF50";
+                }, 500);
+
+                permissionBtn.disabled = false;
+            } catch (e) {
+                console.error("Error loading Vosk model:", e);
+                modelStatus.textContent = "Offline model failed. Using Online mode.";
+                modelStatus.style.color = "#FF9800";
+                useWebSpeechFallback = true;
+                permissionBtn.disabled = false;
+            }
+        }
+
+        // Handle Language Change
+        languageSelect.addEventListener('change', () => {
+            const lang = languageSelect.value;
+            if (lang === 'en-US') {
+                if (model) {
+                    modelStatus.textContent = "Offline Model Ready (English).";
+                    useWebSpeechFallback = false;
+                } else {
+                    loadVoskModel();
+                }
+            } else {
+                // Simulate download for other languages
+                modelStatus.textContent = `Downloading ${languageSelect.options[languageSelect.selectedIndex].text} plugin...`;
+                downloadProgress.style.display = 'block';
+                downloadBar.style.width = '0%';
+
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    downloadBar.style.width = `${progress}%`;
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            downloadProgress.style.display = 'none';
+                            modelStatus.textContent = "Language Plugin Ready (Online Mode).";
+                            modelStatus.style.color = "#4CAF50";
+                            useWebSpeechFallback = true; // Use Web Speech for these
+                        }, 500);
+                    }
+                }, 200);
+            }
+        });
+
+        // Request Microphone Permission
+        permissionBtn.addEventListener('click', async () => {
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                alert("Microphone permission granted!");
+                currentStream.getTracks().forEach(track => track.stop());
+                permissionBtn.style.display = 'none';
+            } catch (err) {
+                console.error("Microphone permission denied:", err);
+                alert("Microphone permission denied. Please enable it in settings.");
+            }
+        });
+
+        // Start Listening
+        async function startListening() {
+            if (isListening) return;
+
+            // Use Web Speech API if fallback is active or model isn't loaded
+            if (useWebSpeechFallback || !model) {
+                startWebSpeechRecognition();
+                return;
+            }
+
+            // Try Vosk
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                currentStream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        channelCount: 1,
+                        sampleRate: 16000
+                    }
+                });
+
+                mediaStreamSource = audioContext.createMediaStreamSource(currentStream);
+
+                // Vosk requires a recognizer instance
+                recognizer = new model.KaldiRecognizer(16000);
+
+                recognizer.on("result", (message) => {
+                    const result = message.result;
+                    if (result.text) {
+                        console.log("Vosk Result:", result.text);
+                        voiceStatus.textContent = `Heard: "${result.text}"`;
+                        processCommand(result.text);
+                        stopListening();
+                    }
+                });
+
+                recognizer.on("partialresult", (message) => {
+                    const partial = message.result.partial;
+                    if (partial) {
+                        voiceStatus.textContent = `Listening: "${partial}..."`;
+                    }
+                });
+
+                // Use ScriptProcessor for audio data extraction (Legacy but works in simple setups)
+                scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+                scriptProcessor.onaudioprocess = (event) => {
+                    if (!isListening) return;
+                    const inputData = event.inputBuffer.getChannelData(0);
+                    // Simple downsampling/conversion might be needed here if context isn't 16k
+                    // But for this demo, we rely on getUserMedia requesting 16k
+                    recognizer.acceptWaveform(inputData);
+                };
+
+                mediaStreamSource.connect(scriptProcessor);
+                scriptProcessor.connect(audioContext.destination);
+
+                isListening = true;
+                voiceOverlay.classList.add('active');
+                voiceStatus.textContent = "Listening (Offline)...";
+
+            } catch (err) {
+                console.error("Vosk failed, trying Web Speech:", err);
+                startWebSpeechRecognition();
+            }
+        }
+
+        function startWebSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const webRecognizer = new SpeechRecognition();
+                webRecognizer.lang = languageSelect.value;
+                webRecognizer.continuous = false;
+                webRecognizer.interimResults = true;
+
+                webRecognizer.onstart = () => {
+                    isListening = true;
+                    voiceOverlay.classList.add('active');
+                    voiceStatus.textContent = "Listening (Online)...";
+                };
+
+                webRecognizer.onend = () => {
+                    if (isListening) stopListening(); // Ensure cleanup
+                };
+
+                webRecognizer.onresult = (event) => {
+                    let finalTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript;
+                        } else {
+                            voiceStatus.textContent = `Listening: "${event.results[i][0].transcript}..."`;
+                        }
+                    }
+                    if (finalTranscript) {
+                        voiceStatus.textContent = `Heard: "${finalTranscript}"`;
+                        processCommand(finalTranscript);
+                        stopListening();
+                    }
+                };
+
+                webRecognizer.onerror = (event) => {
+                    console.error("Web Speech Error:", event.error);
+                    voiceStatus.textContent = "Error. Try again.";
+                    setTimeout(stopListening, 1500);
+                };
+
+                webRecognizer.start();
+            } else {
+                alert("Voice recognition not supported.");
+            }
+        }
+
+        function stopListening() {
+            isListening = false;
+            voiceOverlay.classList.remove('active');
+            voiceStatus.textContent = "Initializing...";
+
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+            if (scriptProcessor) {
+                scriptProcessor.disconnect();
+                scriptProcessor = null;
+            }
+            if (mediaStreamSource) {
+                mediaStreamSource.disconnect();
+                mediaStreamSource = null;
+            }
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+            if (recognizer) {
+                try { recognizer.remove(); } catch(e) {}
+                recognizer = null;
+            }
+        }
+
+        // Command Processing
+        function processCommand(transcript) {
+            const lowerTranscript = transcript.toLowerCase();
+            let matchedCommand = null;
+
+            for (const cmdObj of commands) {
+                for (const variation of cmdObj.variations) {
+                    if (lowerTranscript.includes(variation)) {
+                        matchedCommand = cmdObj.command;
+                        break;
+                    }
+                }
+                if (matchedCommand) break;
+            }
+
+            if (matchedCommand) {
+                executeCommand(matchedCommand, lowerTranscript);
+            } else {
+                voiceStatus.textContent = "Command not recognized.";
+                setTimeout(() => {
+                    voiceOverlay.classList.remove('active');
+                }, 1500);
+            }
+        }
+
+        function executeCommand(command, transcript) {
+            voiceStatus.textContent = `Executing: ${command}`;
+            setTimeout(() => {
+                switch (command) {
+                    case 'play':
+                        alert("Playing video...");
+                        break;
+                    case 'pause':
+                        alert("Pausing video...");
+                        break;
+                    case 'search':
+                        const searchTerms = ["search for", "find", "look for", "search"];
+                        let query = transcript;
+                        for (const term of searchTerms) {
+                            if (query.includes(term)) {
+                                query = query.replace(term, "").trim();
+                                break;
+                            }
+                        }
+                        if (query) {
+                            window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                        } else {
+                            window.location.href = 'search.html';
+                        }
+                        break;
+                    case 'go_to_home':
+                        window.location.href = 'index.html';
+                        break;
+                    case 'go_to_downloads':
+                        window.location.href = 'download.html';
+                        break;
+                    case 'go_to_profile':
+                        window.location.href = 'profile.html';
+                        break;
+                    default:
+                        alert(`Unknown command action: ${command}`);
+                }
+                voiceOverlay.classList.remove('active');
+            }, 1000);
+        }
+
+        // Event Listeners
+        voiceTrigger.addEventListener('click', startListening);
+
+        voiceOverlay.addEventListener('click', (e) => {
+            if (e.target === voiceOverlay || e.target.closest('.voice-circle')) {
+                stopListening();
+            }
+        });
+
+        // Long Press Simulation
+        let pressTimer;
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.closest('button') || e.target.closest('select')) return;
+            pressTimer = setTimeout(() => {
+                startListening();
+            }, 1000);
+        }, { passive: false });
+
+        document.addEventListener('touchend', () => {
+            clearTimeout(pressTimer);
+        });
+
+        // Initial load
+        loadVoskModel();
+        permissionBtn.disabled = true;
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+.watchtime-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--dark-bg);
+}
+
+.watchtime-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-left: 20px;
+}
+
+.watchtime-container {
+    padding: 20px;
+}
+
+.chart-container {
+    margin-top: 20px;
+    height: 300px;
+}
+
+#summary {
+    margin-top: 20px;
+    font-size: 18px;
+    text-align: center;
+}

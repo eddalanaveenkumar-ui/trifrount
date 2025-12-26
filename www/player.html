@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>ΔTube - Video Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="player.css">
+    <script src="capacitor.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <button class="header-icon-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="logo">
+            <span>Triangle</span>
+        </div>
+        <div class="header-right">
+            <button class="notification-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Player Container -->
+    <div class="player-main-container">
+        <div class="player-content-area">
+            <div class="video-player-wrapper">
+                <div class="video-wrapper">
+                    <iframe id="youtube-player"
+                            src=""
+                            allow="autoplay; encrypted-media; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            <div class="video-details-container">
+                <h1 id="video-title" class="video-title-player">Loading...</h1>
+                <div class="video-primary-info">
+                    <div class="channel-info-player">
+                        <span class="channel-avatar-player" id="channel-avatar"></span>
+                        <div class="channel-name-player">
+                            <h2 id="channel-title"></h2>
+                            <span id="subscriber-count"></span>
+                        </div>
+                        <button class="subscribe-btn">Subscribe</button>
+                    </div>
+                    <div class="video-actions-player">
+                        <button class="action-btn-player"><i class="far fa-thumbs-up"></i> <span id="like-count"></span></button>
+                        <button class="action-btn-player"><i class="far fa-thumbs-down"></i></button>
+                        <button class="action-btn-player"><i class="fas fa-share"></i> Share</button>
+                        <button class="action-btn-player" id="downloadBtn"><i class="fas fa-download"></i> Video</button>
+                        <button class="action-btn-player" id="downloadAudioBtn"><i class="fas fa-music"></i> Audio</button>
+                    </div>
+                </div>
+                <div class="video-description-player">
+                    <p id="video-description"></p>
+                    <button id="see-more-btn" class="see-more-btn">See More</button>
+                </div>
+            </div>
+            <div class="ad-banner-container">
+                <!-- Banner Ad -->
+            </div>
+            <div class="comments-section-player">
+                <h2 id="comment-count"></h2>
+                <!-- Comments will be loaded here -->
+            </div>
+        </div>
+        <div class="recommendations-sidebar">
+            <h3 class="recommendations-title">Up next</h3>
+            <div id="recommendations-list"></div>
+        </div>
+    </div>
+
+    <script>
+        function fixVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        fixVH();
+        window.addEventListener('resize', fixVH);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="config.js"></script>
+    <script src="theme.js"></script>
+    <script src="database/db.js"></script>
+    <script src="auth.js"></script>
+    <script src="download-manager.js"></script>
+    <script src="player.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

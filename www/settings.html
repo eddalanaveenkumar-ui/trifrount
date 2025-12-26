@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .settings-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--dark-bg);
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+        .settings-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .settings-container {
+            padding: 0;
+        }
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .settings-item:hover {
+            background-color: var(--hover-color);
+        }
+        .danger-zone {
+            color: #FF3B30;
+        }
+        .danger-zone:hover {
+            background-color: rgba(255, 59, 48, 0.1);
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 28px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+        .logout-btn {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            background: none;
+            color: #FF3B30;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            border-top: 1px solid var(--border-color);
+        }
+        .user-info-display {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--surface-dark);
+        }
+        .user-email-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="settings-header">
+        <a href="profile.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="settings-title">Settings</h1>
+    </header>
+
+    <div class="settings-container">
+        <div class="user-info-display">
+            <img id="settingsAvatar" class="user-avatar-small" src="" alt="Avatar" style="display: none;">
+            <div class="user-email-text" id="userEmailDisplay">
+                Loading email...
+            </div>
+        </div>
+
+        <div class="settings-item">
+            <span>Dark Theme</span>
+            <label class="switch">
+                <input type="checkbox" id="themeSwitch">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <a href="voice.html" class="settings-item" style="text-decoration: none; color: inherit;">
+            <span>Voice Assistant</span>
+        </a>
+        <a href="history.html" class="settings-item" style="text-decoration: none; color: inherit;">
+            <span>History</span>
+        </a>
+        <a href="liked.html" class="settings-item" style="text-decoration: none; color: inherit;">
+            <span>Liked Videos</span>
+        </a>
+        <a href="saved.html" class="settings-item" style="text-decoration: none; color: inherit;">
+            <span>Saved Videos</span>
+        </a>
+        <a href="watchtime.html" class="settings-item" style="text-decoration: none; color: inherit;">
+            <span>Watch Time</span>
+        </a>
+        <div class="settings-item danger-zone">Delete Account</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        function fixVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        fixVH();
+        window.addEventListener('resize', fixVH);
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="theme.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const emailDisplay = document.getElementById('userEmailDisplay');
+            const avatarDisplay = document.getElementById('settingsAvatar');
+
+            function updateUI(profile) {
+                if (profile && profile.email) {
+                    emailDisplay.textContent = profile.email;
+                }
+                if (profile && profile.photo_url) {
+                    avatarDisplay.src = profile.photo_url;
+                    avatarDisplay.style.display = 'block';
+                }
+            }
+
+            // 1. Try LocalStorage first
+            const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+            updateUI(userProfile);
+
+            // 2. Wait for Firebase Auth to confirm
+            if (typeof firebase !== 'undefined') {
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        emailDisplay.textContent = user.email;
+                        if (user.photoURL) {
+                            avatarDisplay.src = user.photoURL;
+                            avatarDisplay.style.display = 'block';
+                        }
+
+                        // Sync with localStorage if needed
+                        if (!userProfile || !userProfile.email) {
+                            const newProfile = userProfile || {};
+                            newProfile.email = user.email;
+                            newProfile.photo_url = user.photoURL;
+                            localStorage.setItem('userProfile', JSON.stringify(newProfile));
+                        }
+                    } else {
+                        emailDisplay.textContent = "Not signed in";
+                        avatarDisplay.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

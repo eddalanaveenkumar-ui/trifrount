@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ΔTube - Downloads</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <script src="capacitor.js"></script>
+    <style>
+        /* Header for Downloads page */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: calc(var(--header-height) + var(--safe-area-top));
+            padding-top: var(--safe-area-top);
+            background-color: var(--dark-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 16px;
+            padding-right: 16px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-logo {
+            font-family: 'Billabong', sans-serif;
+            font-size: 28px;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-actions i {
+            font-size: 24px;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        /* Content Area Adjustment */
+        .content-area {
+            padding-top: calc(var(--header-height) + var(--safe-area-top) + 20px);
+            padding-bottom: calc(var(--nav-height) + var(--safe-area-bottom) + 20px);
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .download-tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .download-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            position: relative;
+        }
+        .download-tab.active {
+            color: var(--text-primary);
+        }
+        .download-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        .download-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--surface-dark);
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .download-thumbnail {
+            width: 120px;
+            height: 68px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 4px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .download-info {
+            flex-grow: 1;
+            min-width: 0;
+        }
+        .download-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .download-details {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .download-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px;
+        }
+        .action-btn:hover {
+            color: var(--text-primary);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .section-title {
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Header -->
+    <header class="app-header">
+        <a href="#" class="header-logo">Triangle</a>
+        <div class="header-actions">
+            <i class="far fa-plus-square"></i>
+            <i class="far fa-paper-plane"></i>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Downloads Page -->
+            <section class="downloads-page active" id="downloadsPage">
+                <h2 class="section-title">
+                    <i class="fas fa-download"></i>
+                    Downloads
+                </h2>
+
+                <div class="download-tabs">
+                    <div class="download-tab active" data-type="video">Videos</div>
+                    <div class="download-tab" data-type="audio">Audio</div>
+                </div>
+
+                <div class="downloads-list" id="downloadsList">
+                    <!-- Downloads loaded by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-items">
+            <a href="index.html" class="mobile-nav-item">
+                <i class="fas fa-play-circle"></i>
+                <span>Videos</span>
+            </a>
+            <a href="short.html" class="mobile-nav-item">
+                <i class="fas fa-bolt"></i>
+                <span>Reels</span>
+            </a>
+            <a href="search.html" class="mobile-nav-item">
+                <i class="fas fa-search"></i>
+                <span>Search</span>
+            </a>
+            <a href="download.html" class="mobile-nav-item active">
+                <i class="fas fa-download"></i>
+                <span>Downloads</span>
+            </a>
+            <a href="profile.html" class="mobile-nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        function fixVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        fixVH();
+        window.addEventListener('resize', fixVH);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="config.js"></script>
+    <script src="theme.js"></script>
+    <script src="auth.js"></script>
+    <script src="download-manager.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const downloadsList = document.getElementById('downloadsList');
+            const tabs = document.querySelectorAll('.download-tab');
+            let currentType = 'video';
+
+            await downloadManager.init();
+
+            function renderDownloads() {
+                const downloads = downloadManager.getDownloads().filter(d => d.type === currentType);
+                downloadsList.innerHTML = '';
+
+                if (downloads.length === 0) {
+                    downloadsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-download"></i>
+                            <p>No downloaded ${currentType}s yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                downloads.forEach(item => {
+                    const downloadItem = document.createElement('div');
+                    downloadItem.className = 'download-item';
+                    downloadItem.innerHTML = `
+                        <div class="download-thumbnail" style="background-image: url('${item.thumbnail}')"></div>
+                        <div class="download-info">
+                            <div class="download-title">${item.title}</div>
+                            <div class="download-details">${item.channel}</div>
+                        </div>
+                        <div class="download-actions">
+                            <button class="action-btn play-offline-btn" data-id="${item.id}" title="Play">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="action-btn remove-btn" data-id="${item.id}" title="Remove">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    downloadsList.appendChild(downloadItem);
+                });
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentType = tab.dataset.type;
+                    renderDownloads();
+                });
+            });
+
+            downloadsList.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.action-btn');
+                if (!btn) return;
+
+                const id = btn.dataset.id;
+
+                if (btn.classList.contains('remove-btn')) {
+                    if (confirm('Are you sure you want to delete this download?')) {
+                        await downloadManager.removeVideo(id);
+                        renderDownloads();
+                    }
+                } else if (btn.classList.contains('play-offline-btn')) {
+                    window.location.href = `player.html?videoId=${id}&offline=true`;
+                }
+            });
+
+            renderDownloads();
+        });
+    </script>
+</body>
+</html>

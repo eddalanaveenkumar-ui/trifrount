@@ -1,0 +1,18 @@
+{
+  "appId": "com.example.Triangle",
+  "appName": "Triangle",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "backgroundColor": "#0f0f0f",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false
+    },
+    "ScreenOrientation": {
+      "lock": "any"
+    }
+  }
+}

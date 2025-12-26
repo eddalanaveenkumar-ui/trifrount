@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Triangle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <script src="capacitor.js"></script>
+</head>
+<body>
+    <!-- Top Header -->
+    <header class="app-header" id="appHeader">
+        <a href="#" class="header-logo">Triangle</a>
+        <div class="header-actions">
+            <i class="far fa-plus-square"></i>
+            <a href="chat.html" style="color: inherit;"><i class="far fa-paper-plane"></i></a>
+        </div>
+    </header>
+
+    <!-- The main grid now handles the full-screen video feed -->
+    <div class="videos-grid" id="videosGrid">
+        <!-- Stories Tray (Now inside the grid to scroll with it) -->
+        <div class="stories-tray" id="storiesTray">
+            <!-- User's Story (Add Story) -->
+            <div class="story-item">
+                <div class="story-ring user-story">
+                    <img src="https://ui-avatars.com/api/?name=Me&background=random" class="story-avatar" id="currentUserStoryAvatar">
+                    <div class="story-add-btn"><i class="fas fa-plus"></i></div>
+                </div>
+                <span class="story-username">Your story</span>
+            </div>
+            <!-- Other Stories will be injected here -->
+        </div>
+
+        <!-- Videos loaded by JavaScript -->
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-items">
+            <a href="index.html" class="mobile-nav-item active">
+                <i class="fas fa-play-circle"></i>
+                <span>Videos</span>
+            </a>
+            <a href="short.html" class="mobile-nav-item">
+                <i class="fas fa-bolt"></i>
+                <span>Reels</span>
+            </a>
+            <a href="search.html" class="mobile-nav-item">
+                <i class="fas fa-search"></i>
+                <span>Search</span>
+            </a>
+            <a href="download.html" class="mobile-nav-item">
+                <i class="fas fa-download"></i>
+                <span>Downloads</span>
+            </a>
+            <a href="profile.html" class="mobile-nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        function fixVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        fixVH();
+        window.addEventListener('resize', fixVH);
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="theme.js"></script>
+    <script src="database/db.js"></script>
+    <script src="auth.js"></script>
+    <script src="download-manager.js"></script>
+    <script src="script.js"></script>
+    <script src="youtube-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "315544385144",
+    "project_id": "triangle-e1a45",
+    "storage_bucket": "triangle-e1a45.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315544385144:android:6a31b630a6c878de645f8d",
+        "android_client_info": {
+          "package_name": "com.example.Triangle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315544385144-4uvrtpu962sfsgncqopeublprfbo0s1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTj3G21ekgtgX150jqT0VIOQBGkcOy2Ew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315544385144-4uvrtpu962sfsgncqopeublprfbo0s1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .edit-profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--dark-bg);
+        }
+        .cancel-btn, .done-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .edit-profile-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .edit-profile-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .profile-image-wrapper {
+            position: relative;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+        .profile-image-edit {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--surface-dark);
+            border: 2px solid var(--border-color);
+        }
+        .change-photo-text {
+            color: var(--primary);
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--surface-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: inherit;
+        }
+        .form-group textarea {
+            resize: none;
+            height: 80px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="edit-profile-header">
+        <a href="profile.html" class="cancel-btn" style="text-decoration: none;">Cancel</a>
+        <h1 class="edit-profile-title">Edit Profile</h1>
+        <button class="done-btn" id="doneBtn">Done</button>
+    </header>
+
+    <div class="edit-profile-container">
+        <div class="profile-image-wrapper" id="changePhotoBtn">
+            <img id="previewImage" class="profile-image-edit" src="" alt="Profile">
+            <div class="change-photo-text">Change Profile Photo</div>
+        </div>
+
+        <div class="form-group">
+            <label for="nameInput">Name</label>
+            <input type="text" id="nameInput" placeholder="Enter your name">
+        </div>
+
+        <div class="form-group">
+            <label for="bioInput">Bio</label>
+            <textarea id="bioInput" placeholder="Write something about yourself..."></textarea>
+        </div>
+    </div>
+
+    <script>
+        function fixVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        fixVH();
+        window.addEventListener('resize', fixVH);
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="theme.js"></script>
+    <script src="auth.js"></script>
+    <script src="capacitor.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const nameInput = document.getElementById('nameInput');
+            const bioInput = document.getElementById('bioInput');
+            const previewImage = document.getElementById('previewImage');
+            const changePhotoBtn = document.getElementById('changePhotoBtn');
+            const doneBtn = document.getElementById('doneBtn');
+
+            let newPhotoBase64 = null;
+
+            // Load current profile data
+            const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+
+            if (typeof firebase !== 'undefined') {
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        // Name logic: prioritize backend display name, then firebase display name
+                        nameInput.value = (userProfile && userProfile.display_name) || user.displayName || '';
+
+                        // Bio logic
+                        if (userProfile && userProfile.bio) {
+                            bioInput.value = userProfile.bio;
+                        }
+
+                        // Photo logic
+                        if (!newPhotoBase64) {
+                            if (userProfile && userProfile.photo_url) {
+                                previewImage.src = userProfile.photo_url;
+                            } else if (user.photoURL) {
+                                previewImage.src = user.photoURL;
+                            } else {
+                                previewImage.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(nameInput.value || 'U')}&background=random`;
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Handle File Selection using Capacitor Camera
+            changePhotoBtn.addEventListener('click', async () => {
+                if (typeof Capacitor === 'undefined') {
+                    alert("Capacitor not loaded. Please run on a device.");
+                    return;
+                }
+
+                try {
+                    const Camera = Capacitor.Plugins.Camera;
+                    if (!Camera) {
+                        throw new Error("Camera plugin not found.");
+                    }
+
+                    const image = await Camera.getPhoto({
+                        quality: 60,
+                        allowEditing: true,
+                        resultType: 'base64',
+                        source: 'PROMPT',
+                        width: 200,
+                        height: 200
+                    });
+
+                    newPhotoBase64 = `data:image/${image.format};base64,${image.base64String}`;
+                    previewImage.src = newPhotoBase64;
+
+                } catch (error) {
+                    console.error("Camera error:", error);
+                    if (error.message !== 'User cancelled photos app') {
+                        alert("Could not access camera/photos: " + error.message);
+                    }
+                }
+            });
+
+            // Handle Save
+            doneBtn.addEventListener('click', async () => {
+                const newName = nameInput.value.trim();
+                const newBio = bioInput.value.trim();
+
+                if (!newName) {
+                    alert("Name cannot be empty.");
+                    return;
+                }
+
+                if (typeof showLoader === 'function') {
+                    showLoader();
+                } else {
+                    doneBtn.textContent = "Saving...";
+                    doneBtn.disabled = true;
+                }
+
+                try {
+                    const user = firebase.auth().currentUser;
+                    if (!user) throw new Error("Not signed in");
+
+                    // 1. Update Firebase Profile (Name)
+                    await user.updateProfile({ displayName: newName });
+
+                    // 2. Update Backend Profile
+                    const idToken = await user.getIdToken();
+                    const backendData = {
+                        bio: newBio,
+                        display_name: newName
+                    };
+                    if (newPhotoBase64) {
+                        backendData.photo_url = newPhotoBase64;
+                    }
+
+                    const response = await fetch(`${API_BASE_URL}/user/profile`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${idToken}`
+                        },
+                        body: JSON.stringify(backendData)
+                    });
+
+                    if (!response.ok) {
+                        const errText = await response.text();
+                        throw new Error("Failed to update backend profile: " + errText);
+                    }
+
+                    // 3. Update Local Storage
+                    const currentProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
+                    currentProfile.display_name = newName;
+                    currentProfile.bio = newBio;
+                    if (newPhotoBase64) {
+                        currentProfile.photo_url = newPhotoBase64;
+                    }
+                    localStorage.setItem('userProfile', JSON.stringify(currentProfile));
+
+                    if (typeof hideLoader === 'function') hideLoader();
+                    window.location.href = 'profile.html';
+
+                } catch (error) {
+                    if (typeof hideLoader === 'function') hideLoader();
+                    doneBtn.textContent = "Done";
+                    doneBtn.disabled = false;
+                    console.error("Error updating profile:", error);
+                    alert("Failed to update profile: " + error.message);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

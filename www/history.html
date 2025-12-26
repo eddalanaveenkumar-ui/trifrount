@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Watch History - ΔTube</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="history.css">
+</head>
+<body>
+    <header class="history-header">
+        <a href="settings.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="history-title">Watch History</h1>
+        <button id="removeAllBtn" class="remove-all-btn">Remove All</button>
+    </header>
+
+    <div class="history-container" id="historyList">
+        <!-- History items will be loaded here -->
+    </div>
+
+    <script>
+        function fixVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        fixVH();
+        window.addEventListener('resize', fixVH);
+    </script>
+    <script src="database/db.js"></script>
+    <script src="auth.js"></script>
+    <script src="history.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

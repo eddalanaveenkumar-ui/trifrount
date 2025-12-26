@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - ΔTube</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box onboard-box">
+            <div class="logo auth-logo">
+                <span class="logo-triangle">Δ</span>
+                <span>Triangle</span>
+            </div>
+            <h2>Tell us about yourself</h2>
+            <p class="subtitle">To personalize your feed</p>
+            <form id="onboardingForm">
+                <div class="form-group">
+                    <label>Your State</label>
+                    <select id="userState" required>
+                        <option value="" disabled selected>Select State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="West Bengal">West Bengal</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Punjab">Punjab</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Preferred Language</label>
+                    <select id="userLanguage" required>
+                        <option value="" disabled selected>Select Language</option>
+                        <option value="Telugu">Telugu</option>
+                        <option value="Tamil">Tamil</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Kannada">Kannada</option>
+                        <option value="Malayalam">Malayalam</option>
+                        <option value="Marathi">Marathi</option>
+                        <option value="Bengali">Bengali</option>
+                        <option value="Gujarati">Gujarati</option>
+                        <option value="Punjabi">Punjabi</option>
+                        <option value="English">English</option>
+                    </select>
+                </div>
+                <button type="submit" class="auth-btn">Continue</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

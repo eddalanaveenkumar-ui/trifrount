@@ -1,0 +1,28 @@
+{
+    "commands": [
+        {
+            "command": "play",
+            "variations": ["play", "start", "begin", "resume"]
+        },
+        {
+            "command": "pause",
+            "variations": ["pause", "stop", "hold", "wait"]
+        },
+        {
+            "command": "search",
+            "variations": ["search for", "find", "look for", "search"]
+        },
+        {
+            "command": "go_to_home",
+            "variations": ["go to home", "home page", "main page", "home"]
+        },
+        {
+            "command": "go_to_downloads",
+            "variations": ["go to downloads", "my downloads", "show downloads", "downloads"]
+        },
+        {
+            "command": "go_to_profile",
+            "variations": ["go to profile", "my profile", "show profile", "profile"]
+        }
+    ]
+}

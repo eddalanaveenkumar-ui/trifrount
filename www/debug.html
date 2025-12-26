@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Feed Debug</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #121212;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        h1 {
+            color: #fff;
+        }
+        #url {
+            color: #87ceeb;
+            word-break: break-all;
+        }
+        #status {
+            font-weight: bold;
+        }
+        .success {
+            color: #32cd32;
+        }
+        .error {
+            color: #ff6347;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Feed Debug</h1>
+    <p>Fetching data from: <strong id="url"></strong></p>
+    <p>Status: <strong id="status">Loading...</strong></p>
+    <pre id="output">Waiting for server response...</pre>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const apiUrl = 'https://backend-bwwq.onrender.com/api/feed';
+            const urlEl = document.getElementById('url');
+            const statusEl = document.getElementById('status');
+            const outputEl = document.getElementById('output');
+
+            urlEl.textContent = apiUrl;
+
+            try {
+                const response = await fetch(apiUrl);
+
+                if (response.ok) {
+                    statusEl.textContent = 'Success';
+                    statusEl.className = 'success';
+                    const data = await response.json();
+                    // Format the JSON with an indent of 2 spaces for readability
+                    outputEl.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    statusEl.textContent = `Error: ${response.status}`;
+                    statusEl.className = 'error';
+                    const errorText = await response.text();
+                    try {
+                        // Try to parse as JSON for FastAPI errors
+                        const errorJson = JSON.parse(errorText);
+                        outputEl.textContent = JSON.stringify(errorJson, null, 2);
+                    } catch (e) {
+                        // If not JSON, just show the raw text
+                        outputEl.textContent = errorText;
+                    }
+                }
+            } catch (error) {
+                statusEl.textContent = 'Failed to Fetch';
+                statusEl.className = 'error';
+                outputEl.textContent = `A network error occurred. This usually means the server is down or unreachable.\n\nError: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Triangle - Chats</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+    <!-- Chat Header -->
+    <header class="app-header">
+        <a href="index.html" class="header-back-arrow"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">Chats</div>
+        <div class="header-actions">
+            <i class="far fa-edit"></i>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="chat-container" id="chatContainer">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <!-- Chat List / Empty States will be rendered here by JavaScript -->
+        <div class="chat-list" id="chatList">
+            <!-- Example of a chat item -->
+            <!--
+            <div class="chat-item">
+                <img src="https://i.pravatar.cc/150?u=alex" alt="User" class="chat-avatar">
+                <div class="chat-details">
+                    <div class="chat-username">alex_d</div>
+                    <div class="chat-last-message">Hey, how are you?</div>
+                </div>
+                <div class="chat-timestamp">2h</div>
+            </div>
+            -->
+        </div>
+    </div>
+
+    <script src="chat.js"></script>
+</body>
+</html>

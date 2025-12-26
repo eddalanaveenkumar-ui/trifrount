@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Reels</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Specific overrides for Reels page */
+        body, html {
+            overflow: hidden !important; /* Force no scroll on body */
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .reels-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%; /* Take full viewport height */
+            background-color: #000;
+            z-index: 1;
+        }
+        .reels-feed {
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+            /* This will have content go under the nav, but that's okay for immersive reels */
+        }
+        .reel-item {
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+        }
+        .back-arrow-reels {
+            position: fixed;
+            top: calc(20px + var(--safe-area-top));
+            left: 20px;
+            z-index: 2001; /* Above reels, below nav */
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        /* Push overlay content up from under the nav bar */
+        .reel-overlay {
+            padding-bottom: calc(var(--nav-height) + var(--safe-area-bottom) + 20px);
+        }
+        .reel-actions {
+            bottom: calc(var(--nav-height) + var(--safe-area-bottom) + 20px);
+        }
+
+        /* Header for Reels page - transparent overlay */
+        .app-header-reels {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: calc(var(--header-height) + var(--safe-area-top));
+            padding-top: var(--safe-area-top);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 16px;
+            padding-right: 16px;
+            z-index: 2000;
+            border: none;
+        }
+
+        .app-header-reels .header-logo {
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .app-header-reels .header-actions i {
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Header (Overlay for Reels) -->
+    <header class="app-header-reels">
+        <a href="#" class="header-logo">Triangle</a>
+        <div class="header-actions">
+            <i class="far fa-plus-square"></i>
+            <i class="far fa-paper-plane"></i>
+        </div>
+    </header>
+
+    <div class="reels-container">
+        <div class="reels-feed" id="reelsFeed">
+            <!-- Reels loaded by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-items">
+            <a href="index.html" class="mobile-nav-item">
+                <i class="fas fa-play-circle"></i>
+                <span>Videos</span>
+            </a>
+            <a href="short.html" class="mobile-nav-item active">
+                <i class="fas fa-bolt"></i>
+                <span>Reels</span>
+            </a>
+            <a href="search.html" class="mobile-nav-item">
+                <i class="fas fa-search"></i>
+                <span>Search</span>
+            </a>
+            <a href="download.html" class="mobile-nav-item">
+                <i class="fas fa-download"></i>
+                <span>Downloads</span>
+            </a>
+            <a href="profile.html" class="mobile-nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        function fixVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        fixVH();
+        window.addEventListener('resize', fixVH);
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="theme.js"></script>
+    <script src="database/db.js"></script>
+    <script src="auth.js"></script>
+    <script src="youtube-loader.js"></script>
+    <script src="reels.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

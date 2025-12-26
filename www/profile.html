@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ΔTube - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Custom Header for Profile Page */
+        .profile-page-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--dark-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 20px;
+            padding-top: var(--safe-area-top);
+            z-index: 1000;
+            height: calc(var(--header-height) + var(--safe-area-top));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .profile-header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .profile-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-header-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Adjust main container to account for custom header */
+        .main-container {
+            padding-top: calc(var(--header-height) + var(--safe-area-top));
+        }
+
+        .profile-header-content {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .profile-top-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .profile-avatar-container {
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        .profile-image-display {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--surface-dark);
+        }
+        .profile-stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex: 1;
+        }
+        .profile-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .stat-number {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .profile-info-section {
+            width: 100%;
+        }
+        .profile-name {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+        .profile-bio {
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+        }
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .action-btn {
+            flex: 1;
+            background-color: var(--surface-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 0;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Profile Header -->
+    <header class="profile-page-header">
+        <div class="profile-header-title" id="headerUsername">
+            User ID <i class="fas fa-chevron-down" style="font-size: 12px;"></i>
+        </div>
+        <div class="profile-header-actions">
+            <button class="profile-header-btn">
+                <i class="far fa-plus-square"></i>
+            </button>
+            <a href="settings.html" class="profile-header-btn" style="text-decoration: none;">
+                <i class="fas fa-bars"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Profile Page -->
+            <section class="profile-page active" id="profilePage">
+                <div class="profile-header-content">
+                    <div class="profile-top-section">
+                        <div class="profile-avatar-container">
+                            <img id="profileImage" class="profile-image-display" src="" alt="Profile">
+                        </div>
+                        <div class="profile-stats-container">
+                            <div class="profile-stat">
+                                <span class="stat-number">0</span>
+                                <span class="stat-label">Stories</span>
+                            </div>
+                            <div class="profile-stat">
+                                <span class="stat-number">0</span>
+                                <span class="stat-label">Followers</span>
+                            </div>
+                            <div class="profile-stat">
+                                <span class="stat-number">0</span>
+                                <span class="stat-label">Following</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-section">
+                        <h1 class="profile-name" id="profileName">Full Name</h1>
+                        <div class="profile-bio" id="profileBio"></div>
+                    </div>
+
+                    <div class="profile-actions">
+                        <a href="pe.html" class="action-btn">Edit Profile</a>
+                        <button class="action-btn">Share Profile</button>
+                    </div>
+                </div>
+
+                <div class="profile-content" id="profileContent">
+                    <!-- User videos loaded by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-items">
+            <a href="index.html" class="mobile-nav-item">
+                <i class="fas fa-play-circle"></i>
+                <span>Videos</span>
+            </a>
+            <a href="short.html" class="mobile-nav-item">
+                <i class="fas fa-bolt"></i>
+                <span>Reels</span>
+            </a>
+            <a href="search.html" class="mobile-nav-item">
+                <i class="fas fa-search"></i>
+                <span>Search</span>
+            </a>
+            <a href="download.html" class="mobile-nav-item">
+                <i class="fas fa-download"></i>
+                <span>Downloads</span>
+            </a>
+            <a href="profile.html" class="mobile-nav-item active">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        function fixVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        fixVH();
+        window.addEventListener('resize', fixVH);
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="theme.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof auth !== 'undefined') {
+                auth.onAuthStateChanged(user => {
+                    if (user) {
+                        const profileName = document.getElementById('profileName');
+                        const headerUsername = document.getElementById('headerUsername');
+                        const profileImage = document.getElementById('profileImage');
+                        const profileBio = document.getElementById('profileBio');
+
+                        // Load data from localStorage (synced from backend)
+                        const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+
+                        // Set Header Username (User ID)
+                        const username = (userProfile && userProfile.username) || user.email.split('@')[0];
+                        headerUsername.innerHTML = `${username} <i class="fas fa-chevron-down" style="font-size: 12px;"></i>`;
+
+                        // Set Full Name
+                        profileName.textContent = user.displayName || username;
+
+                        // Set Bio
+                        if (userProfile && userProfile.bio) {
+                            profileBio.textContent = userProfile.bio;
+                        }
+
+                        // Set Photo
+                        const photoUrl = (userProfile && userProfile.photo_url) || user.photoURL;
+                        if (photoUrl) {
+                            profileImage.src = photoUrl;
+                        } else {
+                            profileImage.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random`;
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

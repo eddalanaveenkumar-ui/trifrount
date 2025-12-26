@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - ΔTube</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+    <style>
+        .verify-icon {
+            font-size: 64px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .email-text {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 10px 0;
+        }
+        .resend-link {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+            border: none;
+            background: none;
+            font-size: 14px;
+            padding: 0;
+        }
+        .resend-link:disabled {
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="verify-icon">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+            <h2>Verify your email</h2>
+            <p class="subtitle">We've sent a verification link to:</p>
+            <p class="email-text" id="userEmail">your@email.com</p>
+            <p class="subtitle" style="margin-top: 20px;">
+                Please check your inbox and click the link to verify your account.
+            </p>
+
+            <div style="margin-top: 30px;">
+                <p class="subtitle">Didn't receive the email?</p>
+                <button id="resendBtn" class="resend-link">Resend Verification Email</button>
+                <p id="resendMessage" style="font-size: 12px; color: var(--text-secondary); margin-top: 5px;"></p>
+            </div>
+
+            <button id="backToLoginBtn" class="auth-btn" style="margin-top: 30px; background-color: var(--surface-dark); border: 1px solid var(--border-color);">
+                Back to Login
+            </button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const emailDisplay = document.getElementById('userEmail');
+            const resendBtn = document.getElementById('resendBtn');
+            const resendMessage = document.getElementById('resendMessage');
+            const backToLoginBtn = document.getElementById('backToLoginBtn');
+
+            // Get email from URL parameter or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email') || localStorage.getItem('pendingEmail');
+
+            if (email) {
+                emailDisplay.textContent = email;
+            } else {
+                emailDisplay.textContent = "your email";
+            }
+
+            // Resend Logic
+            resendBtn.addEventListener('click', () => {
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    user.sendEmailVerification().then(() => {
+                        resendMessage.textContent = "Email sent! Please check your inbox.";
+                        resendBtn.disabled = true;
+                        setTimeout(() => {
+                            resendBtn.disabled = false;
+                            resendMessage.textContent = "";
+                        }, 60000); // Enable after 1 minute
+                    }).catch(error => {
+                        console.error("Error sending email:", error);
+                        resendMessage.textContent = "Error: " + error.message;
+                    });
+                } else {
+                    // If user is not signed in (session cleared), we can't resend easily without re-auth
+                    // So we redirect to login
+                    alert("Session expired. Please log in again to resend verification.");
+                    window.location.href = 'login.html';
+                }
+            });
+
+            backToLoginBtn.addEventListener('click', () => {
+                firebase.auth().signOut().then(() => {
+                    window.location.href = 'login.html';
+                });
+            });
+
+            // Poll for verification status
+            const checkInterval = setInterval(async () => {
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    await user.reload(); // Refresh user data from Firebase
+                    if (user.emailVerified) {
+                        clearInterval(checkInterval);
+                        alert("Email verified! Redirecting...");
+                        window.location.href = 'index.html'; // Or handleUserSession logic
+                    }
+                }
+            }, 3000); // Check every 3 seconds
+        });
+    </script>
+</body>
+</html>

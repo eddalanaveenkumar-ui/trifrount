@@ -1,0 +1,163 @@
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-primary);
+    font-family: 'Roboto', sans-serif;
+}
+
+.app-header {
+    justify-content: space-between;
+}
+
+.header-back-arrow {
+    color: var(--text-primary);
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.header-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.chat-container {
+    padding-top: calc(var(--header-height) + var(--safe-area-top));
+    padding-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--surface-dark);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 10px 15px;
+}
+
+.search-bar i {
+    color: var(--text-secondary);
+    margin-right: 10px;
+}
+
+.search-bar input {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 16px;
+    width: 100%;
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+.chat-list {
+    padding: 0 15px;
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.chat-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.chat-details {
+    flex: 1;
+}
+
+.chat-username {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.chat-last-message {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.chat-timestamp {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+/* --- Empty States --- */
+.empty-state-container {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-secondary);
+}
+
+.empty-state-container i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    display: block;
+    color: var(--text-primary);
+}
+
+.empty-state-container h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.empty-state-container p {
+    margin-bottom: 20px;
+}
+
+.invite-link {
+    display: inline-block;
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.following-list {
+    padding: 0 15px;
+}
+
+.following-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.following-info {
+    display: flex;
+    align-items: center;
+}
+
+.following-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.following-username {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.chat-btn {
+    background-color: var(--surface-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+}
