@@ -1,22 +1,38 @@
 // Live Backend URL
 const API_BASE_URL = "https://triback.onrender.com/api";
 
+// State variables
+let isSessionCheckInProgress = false;
+
 // --- Loader Animation ---
-function showLoader() {
-    if (document.getElementById('loading-overlay')) return;
-    const overlay = document.createElement('div');
-    overlay.id = 'loading-overlay';
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.7);display:flex;justify-content:center;align-items:center;z-index:9999;';
-    const spinner = document.createElement('div');
-    spinner.id = 'loading-spinner';
-    spinner.style.cssText = 'border:8px solid #f3f3f3;border-top:8px solid #FF0000;border-radius:50%;width:60px;height:60px;animation:spin 1s linear infinite;';
-    overlay.appendChild(spinner);
-    document.body.appendChild(overlay);
-    const style = document.createElement('style');
-    if (!document.getElementById('spinner-style')) {
-        style.id = 'spinner-style';
-        style.innerHTML = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
-        document.head.appendChild(style);
+function showLoader(message = null) {
+    let overlay = document.getElementById('loading-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'loading-overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.7);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;color:white;font-family:sans-serif;';
+
+        const spinner = document.createElement('div');
+        spinner.id = 'loading-spinner';
+        spinner.style.cssText = 'border:8px solid #f3f3f3;border-top:8px solid #FF0000;border-radius:50%;width:60px;height:60px;animation:spin 1s linear infinite;margin-bottom:15px;';
+
+        const msgDiv = document.createElement('div');
+        msgDiv.id = 'loading-message';
+        msgDiv.innerText = message || "Loading...";
+
+        overlay.appendChild(spinner);
+        overlay.appendChild(msgDiv);
+        document.body.appendChild(overlay);
+
+        const style = document.createElement('style');
+        if (!document.getElementById('spinner-style')) {
+            style.id = 'spinner-style';
+            style.innerHTML = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
+            document.head.appendChild(style);
+        }
+    } else {
+        const msgDiv = document.getElementById('loading-message');
+        if (msgDiv && message) msgDiv.innerText = message;
     }
 }
 
@@ -25,74 +41,148 @@ function hideLoader() {
     if (overlay) overlay.remove();
 }
 
-// --- Centralized Session Handler ---
-let isHandlingSession = false;
+// --- Helper: Fetch with Timeout ---
+async function fetchWithTimeout(resource, options = {}) {
+    const { timeout = 60000 } = options; // Increased to 60s for Render cold starts
 
-async function handleUserSession(user) {
-    if (isHandlingSession) return;
-    isHandlingSession = true;
-
-    // Ensure loader is visible while we work
-    showLoader();
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
 
     try {
-        const idToken = await user.getIdToken(true); // Force refresh
-
-        // Add a timeout to the fetch to prevent infinite hanging
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
-
-        const response = await fetch(`${API_BASE_URL}/user/profile`, {
-            headers: { 'Authorization': `Bearer ${idToken}` },
+        const response = await fetch(resource, {
+            ...options,
             signal: controller.signal
         });
+        clearTimeout(id);
+        return response;
+    } catch (error) {
+        clearTimeout(id);
+        throw error;
+    }
+}
 
-        clearTimeout(timeoutId);
+// --- Centralized Session Handler ---
+async function handleUserSession(user) {
+    if (isSessionCheckInProgress) {
+        console.log("Session check already in progress, skipping.");
+        return;
+    }
+    isSessionCheckInProgress = true;
+
+    console.log("Handling user session for:", user.email);
+
+    // Check local storage first
+    if (localStorage.getItem('userProfile')) {
+        try {
+            const storedProfile = JSON.parse(localStorage.getItem('userProfile'));
+            if (storedProfile.email === user.email) {
+                 console.log("Valid local profile found, redirecting...");
+                 window.location.replace('index.html');
+                 return;
+            }
+        } catch (e) {
+            console.error("Error parsing local profile:", e);
+            localStorage.removeItem('userProfile');
+        }
+    }
+
+    showLoader("Connecting to server...");
+
+    const slowConnectionTimeout = setTimeout(() => {
+        showLoader("Waking up server... this may take a minute...");
+    }, 3000);
+
+    try {
+        // DEBUG: Step 1
+        // alert("Step 1: Getting ID Token...");
+
+        // Wrap getIdToken in a promise race to prevent hanging
+        const idTokenPromise = user.getIdToken(true);
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Token fetch timed out")), 15000));
+        const idToken = await Promise.race([idTokenPromise, timeoutPromise]);
+
+        // DEBUG: Step 2
+        // alert("Step 2: Got Token. Fetching profile...");
+
+        // 1. Try to get existing profile
+        let response;
+        try {
+            response = await fetchWithTimeout(`${API_BASE_URL}/user/profile`, {
+                headers: { 'Authorization': `Bearer ${idToken}` }
+            });
+        } catch (netError) {
+            throw new Error("Network error connecting to profile endpoint: " + netError.message);
+        }
+
+        clearTimeout(slowConnectionTimeout);
 
         if (response.ok) {
             const profile = await response.json();
-            // Ensure photo_url is in the profile
-            if (!profile.photo_url) {
-                profile.photo_url = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=random`;
-            }
             localStorage.setItem('userProfile', JSON.stringify(profile));
-            window.location.href = 'index.html';
-        } else if (response.status === 404) {
-            // New user, redirect to onboarding
-            window.location.href = 'onboarding.html';
+            // DEBUG: Step 3
+            // alert("Step 3: Profile found. Redirecting...");
+            window.location.replace('index.html');
         } else {
-            throw new Error(`Server error: ${response.status}`);
+            // 2. If profile not found, sync with backend
+            console.log("Profile not found (Status: " + response.status + "), syncing...");
+            showLoader("Creating user profile...");
+
+            let loginResponse;
+            try {
+                loginResponse = await fetchWithTimeout(`${API_BASE_URL}/user/google-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_token: idToken })
+                });
+            } catch (netError) {
+                throw new Error("Network error connecting to login endpoint: " + netError.message);
+            }
+
+            if (loginResponse.ok) {
+                const backendResponse = await loginResponse.json();
+                localStorage.setItem('userProfile', JSON.stringify(backendResponse.profile));
+                if (backendResponse.new_user) {
+                    window.location.replace('onboarding.html');
+                } else {
+                    window.location.replace('index.html');
+                }
+            } else {
+                let errorMsg = "Unknown backend error";
+                try {
+                    const errorData = await loginResponse.json();
+                    errorMsg = errorData.detail || errorMsg;
+                } catch (e) {
+                    errorMsg = "Non-JSON response from server: " + loginResponse.statusText;
+                }
+                throw new Error(errorMsg);
+            }
         }
     } catch (error) {
+        clearTimeout(slowConnectionTimeout);
         console.error("Session handling error:", error);
         hideLoader();
 
-        let msg = "Could not connect to the server.";
-        if (error.name === 'AbortError') {
-            msg = "Connection timed out. Please check your internet.";
-        } else if (error.message.includes("Server error")) {
-            msg = error.message;
-        }
+        const path = window.location.pathname;
+        const page = path.split("/").pop().split("?")[0];
 
-        alert(`${msg}\n\nPlease try again.`);
-        // We do NOT logout here. The user is authenticated with Firebase.
-        // They can click "Continue with Google" again to retry the backend fetch.
+        if (page === 'login.html' || page === 'signup.html') {
+             alert("Login failed: " + error.message);
+             // Only sign out if it was a fatal error, otherwise user loses their session
+             await firebase.auth().signOut();
+        }
     } finally {
-        isHandlingSession = false;
-        // Note: We don't hide loader on success because the page redirects.
-        // We only hide it on error (in the catch block).
+        isSessionCheckInProgress = false;
     }
 }
 
 // --- Main Logic ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Ensure Firebase is initialized
     if (typeof firebase === 'undefined') {
         console.error("Firebase SDK not loaded.");
         return;
     }
 
-    // Set Persistence
+    firebase.auth().useDeviceLanguage();
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .catch((error) => console.error("Error setting persistence:", error));
 
@@ -132,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (onboardingForm) {
         onboardingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            showLoader();
+            showLoader("Saving...");
             const state = document.getElementById('userState').value;
             const language = document.getElementById('userLanguage').value;
 
@@ -143,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const idToken = await user.getIdToken();
                         const photoUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=random`;
 
-                        const response = await fetch(`${API_BASE_URL}/user/profile`, {
+                        const response = await fetchWithTimeout(`${API_BASE_URL}/user/profile`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
                             body: JSON.stringify({ state, language, photo_url: photoUrl })
@@ -158,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 photo_url: photoUrl
                             };
                             localStorage.setItem('userProfile', JSON.stringify(userProfile));
-                            window.location.href = 'index.html';
+                            window.location.replace('index.html');
                         } else {
                             throw new Error((await response.json()).detail || "Failed to save profile");
                         }
@@ -195,8 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (isAuthPage) {
-                // User is logged in but on an auth page.
-                // This happens after login, or if they revisit login.html while authenticated.
                 await handleUserSession(user);
             }
         } else {
@@ -211,12 +299,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Auth Functions ---
 
 async function login(loginInput, password) {
-    showLoader();
+    showLoader("Logging in...");
     let email = loginInput;
 
     if (!loginInput.includes('@')) {
         try {
-            const response = await fetch(`${API_BASE_URL}/user/lookup`, {
+            const response = await fetchWithTimeout(`${API_BASE_URL}/user/lookup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: loginInput })
@@ -242,26 +330,26 @@ async function login(loginInput, password) {
         });
 }
 
-let isGoogleLoginPending = false;
 async function googleLogin() {
-    if (isGoogleLoginPending) return;
-    isGoogleLoginPending = true;
-    showLoader();
+    showLoader("Opening Google Sign-In...");
 
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
 
     try {
-        // We await this. If successful, onAuthStateChanged will fire and handle the rest.
-        await firebase.auth().signInWithPopup(provider);
+        const result = await firebase.auth().signInWithPopup(provider);
+        // Explicitly call session handler to ensure it runs immediately
+        showLoader("Verifying login...");
+        await handleUserSession(result.user);
     } catch (error) {
-        hideLoader(); // Only hide if the popup itself fails/cancels
+        hideLoader();
         console.error("Google Sign-In Error:", error);
-        if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
+
+        if (error.code === 'auth/popup-blocked') {
+            alert("Popup blocked. Please allow popups for this site.");
+        } else if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
             alert("Google Sign-In failed: " + error.message);
         }
-    } finally {
-        isGoogleLoginPending = false;
     }
 }
 
@@ -270,13 +358,13 @@ function signup(name, username, email, password, confirmPassword) {
         alert("Passwords do not match.");
         return;
     }
-    showLoader();
+    showLoader("Creating account...");
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(async (userCredential) => {
             await userCredential.user.updateProfile({ displayName: name });
             const idToken = await userCredential.user.getIdToken();
 
-            const response = await fetch(`${API_BASE_URL}/user/register`, {
+            const response = await fetchWithTimeout(`${API_BASE_URL}/user/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
                 body: JSON.stringify({ username, email, display_name: name })
@@ -302,7 +390,7 @@ function signup(name, username, email, password, confirmPassword) {
 }
 
 function logout() {
-    showLoader();
+    showLoader("Signing out...");
     firebase.auth().signOut().then(() => {
         localStorage.clear();
         sessionStorage.clear();

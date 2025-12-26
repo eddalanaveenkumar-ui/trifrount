@@ -20,6 +20,7 @@
     "@capacitor/filesystem": "^5.0.0",
     "@capacitor/screen-orientation": "^5.0.0",
     "@capacitor/splash-screen": "^5.0.8",
+    "@react-oauth/google": "^0.13.4",
     "axios": "^1.13.2",
     "cheerio": "^1.1.2",
     "cors": "^2.8.5",
